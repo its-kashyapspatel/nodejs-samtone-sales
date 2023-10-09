@@ -6,4 +6,8 @@ router.post('/create', ClientController.createClient);
 
 router.put('/update', ClientController.updateClient);
 
+router.get('/:id', ClientController.searchClientByClientId);
+
+router.get('/:name', ClientController.searchClientByClientId);
+
 module.exports = router;

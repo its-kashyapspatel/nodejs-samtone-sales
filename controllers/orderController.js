@@ -1,44 +1,53 @@
 const Order = require('../models/Order');
 const uuid = require('uuid');
 
-exports.placeOrder = async (req, res) => {
+exports.placeOrder =async (req, res) => {
     const { userId, clientId, product, qty } = req.body;
     const orderId = uuid.v4();
     try {
         const newOrder = new Order({ userId, clientId, orderId, product, qty });
         await newOrder.save();
-        res.status(201).send('Order Placed Successfully!').json({orderId: orderId});
-    } catch(err) {
-        res.send(err);
+        res.send('Order Placed Successfully!');
+    } catch(error) {
+        res.send(error);
     }
 }
 
-exports.findOrderByClient = async (req, res) => {
+exports.findOrdersByClient = async (req, res) => {
     const clientId = req.params.id;
     try {
         const orders = await Order.find({ clientId: clientId });
         res.send(orders);
-    } catch(err) {
-        res.send(err);
+    } catch(error) {
+        res.send(error);
     }
 }
 
-exports.findOrderByUser = async (req, res) => {
+exports.findOrdersByUser = async (req, res) => {
     const userId = req.params.id;
-
     try {
         const orders = await Order.find({ userId });
         res.send(orders);
-    } catch(err) {
-        res.send(err);
+    } catch(error) {
+        res.send(error);
     }
 }
 
 exports.getAll = async (req, res) => {
     try {
-        const orders = Order.find();
+        const orders = await Order.find();
         res.send(orders);
-    } catch(err) {
-        res.send(err);
+    } catch(error) {
+        res.send(error);
+    }
+}
+
+exports.getOrderByOrderId = async (req, res) => {
+    const orderId = req.params.id;
+    try{
+        const order = await Order.find({orderId});
+        res.send(order);
+    } catch (error) {
+        res.send(error);
     }
 }

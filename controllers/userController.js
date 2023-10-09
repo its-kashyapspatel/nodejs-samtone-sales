@@ -14,9 +14,9 @@ exports.createUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const newUser = new User({ name, email, userId, password: hashedPassword, phone });
         await newUser.save();
-        res.status(201).send('User Registered Successfully!');
-    } catch(err) {
-        res.send(err);
+        res.send('User Registered Successfully!');
+    } catch(error) {
+        res.send(error);
     }
 }
 
@@ -24,21 +24,36 @@ exports.loginUser = async (req, res) => {
     const { userId, password } = req.body;
     try {
         const user = await User.findOne({ userId });
-
         if(!user) {
             res.send('User Not Found!');
             return;
         }
-
         const passwordMatch = await bcrypt.compare(password, user.password);
-
         if(passwordMatch) {
             const token = jwt.sign({userId}, secretKey, { expiresIn: '1h' });
             res.json({ token });
         } else {
             res.send('Password Does not Match!');
         }
-    } catch(err) {
-        res.send(err);
+    } catch(error) {
+        res.send(error);
+    }
+}
+
+exports.getUser = async (req, res) => {
+    const userId = req.params.id;
+    try {
+        const user = await User.find({userId});
+        console.log(user);
+        const userDetails = {
+            userId: user[0].userId,
+            name: user[0].name,
+            email: user[0].email,
+            phone: user[0].phone
+        };
+        console.log(userDetails);
+        res.send(userDetails);
+    } catch (error) {
+        res.send(error);
     }
 }

@@ -8,6 +8,7 @@ const clientSchema = new mongoose.Schema({
     companyName: { type: String, required: true },
     companyAddress: { type: String, required: true },
     createdOn: { type: Date, default: Date.now },
+    accountCreatedBy: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Client', clientSchema);

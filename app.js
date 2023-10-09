@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const UserRoutes = require('./routes/userRoutes');
 const ClientRoutes = require('./routes/clientRoutes');
 const OrderRoutes = require('./routes/orderRoutes');
+const ProductRoutes = require('./routes/productRoutes');
 const authenticateJWT = require('./middlewares/authMiddleware');
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use('/user', UserRoutes);
 app.use('/client', authenticateJWT, ClientRoutes);
 app.use('/order', authenticateJWT, OrderRoutes);
+app.use('/product', authenticateJWT, ProductRoutes);
 
 mongoose.connect(process.env.MONGODB_URL);
 mongoose.connection.on('connected', () => console.log('Connected'));
